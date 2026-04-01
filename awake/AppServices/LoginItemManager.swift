@@ -9,9 +9,21 @@ final class LoginItemManager: ObservableObject {
 
     init() {
         isEnabled = SMAppService.mainApp.status == .enabled
+        AwakeLogger.shared.event(
+            level: .debug,
+            component: "LoginItem",
+            action: "Initialized",
+            details: "isEnabled=\(isEnabled)"
+        )
     }
 
     func setEnabled(_ enabled: Bool) {
+        AwakeLogger.shared.event(
+            level: .info,
+            component: "LoginItem",
+            action: "SetRequested",
+            details: "enabled=\(enabled)"
+        )
         do {
             if enabled {
                 try SMAppService.mainApp.register()
@@ -20,9 +32,16 @@ final class LoginItemManager: ObservableObject {
             }
             isEnabled = enabled
             lastError = nil
+            AwakeLogger.shared.event(level: .info, component: "LoginItem", action: "SetSucceeded", details: "enabled=\(enabled)")
         } catch {
             isEnabled = SMAppService.mainApp.status == .enabled
             lastError = "Unable to update Launch at Login."
+            AwakeLogger.shared.event(
+                level: .error,
+                component: "LoginItem",
+                action: "SetFailed",
+                details: "requested=\(enabled) actual=\(isEnabled) error=\(error.localizedDescription)"
+            )
         }
     }
 }

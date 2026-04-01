@@ -34,7 +34,7 @@ final class StatusBarController: NSObject, NSMenuDelegate {
 
     private func configureButton() {
         guard let button = statusItem.button else {
-            AwakeLogger.shared.error("Failed to configure status item button")
+            AwakeLogger.shared.event(level: .error, component: "StatusBar", action: "ButtonUnavailable")
             return
         }
 
@@ -42,6 +42,7 @@ final class StatusBarController: NSObject, NSMenuDelegate {
         button.action = #selector(handleStatusItemClick(_:))
         button.sendAction(on: [.leftMouseUp, .rightMouseUp])
         button.imagePosition = .imageLeft
+        AwakeLogger.shared.event(level: .debug, component: "StatusBar", action: "ButtonConfigured")
     }
 
     private func bindState() {
@@ -62,13 +63,16 @@ final class StatusBarController: NSObject, NSMenuDelegate {
     @objc
     private func handleStatusItemClick(_ sender: NSStatusBarButton) {
         guard let event = NSApp.currentEvent else {
+            AwakeLogger.shared.event(level: .warning, component: "StatusBar", action: "ClickWithoutCurrentEvent")
             return
         }
 
         switch event.type {
         case .rightMouseUp:
+            AwakeLogger.shared.event(level: .trace, component: "StatusBar", action: "RightClick")
             handleRightClickQuickAction()
         case .leftMouseUp:
+            AwakeLogger.shared.event(level: .trace, component: "StatusBar", action: "LeftClick")
             showMenu()
         default:
             break
@@ -79,11 +83,14 @@ final class StatusBarController: NSObject, NSMenuDelegate {
         switch sessionManager.state {
         case .active(let mode, _, _):
             if case .indefinite = mode {
+                AwakeLogger.shared.event(level: .info, component: "StatusBar", action: "RightClickQuickStop")
                 sessionManager.stop()
             } else {
+                AwakeLogger.shared.event(level: .info, component: "StatusBar", action: "RightClickSwitchToIndefinite")
                 sessionManager.start(mode: .indefinite)
             }
         case .inactive:
+            AwakeLogger.shared.event(level: .info, component: "StatusBar", action: "RightClickStartIndefinite")
             sessionManager.start(mode: .indefinite)
         }
 
@@ -91,6 +98,7 @@ final class StatusBarController: NSObject, NSMenuDelegate {
     }
 
     private func showMenu() {
+        AwakeLogger.shared.event(level: .trace, component: "StatusBar", action: "MenuOpen")
         let menu = buildMenu()
         menu.delegate = self
         currentMenu = menu
@@ -172,6 +180,12 @@ final class StatusBarController: NSObject, NSMenuDelegate {
 
     private func setShowRemainingInMenuBar(_ value: Bool) {
         UserDefaults.standard.set(value, forKey: DefaultsKeys.showRemainingInMenuBar)
+        AwakeLogger.shared.event(
+            level: .info,
+            component: "Preferences",
+            action: "ShowRemainingInMenuBarChanged",
+            details: "value=\(value)"
+        )
         updateStatusButton()
     }
 
@@ -196,22 +210,27 @@ final class StatusBarController: NSObject, NSMenuDelegate {
     }
 
     @objc private func start30Minutes() {
+        AwakeLogger.shared.event(level: .trace, component: "MenuAction", action: "Start30Minutes")
         sessionManager.start(mode: .timed(duration: 30 * 60))
     }
 
     @objc private func start1Hour() {
+        AwakeLogger.shared.event(level: .trace, component: "MenuAction", action: "Start1Hour")
         sessionManager.start(mode: .timed(duration: 60 * 60))
     }
 
     @objc private func start4Hours() {
+        AwakeLogger.shared.event(level: .trace, component: "MenuAction", action: "Start4Hours")
         sessionManager.start(mode: .timed(duration: 4 * 60 * 60))
     }
 
     @objc private func startIndefinite() {
+        AwakeLogger.shared.event(level: .trace, component: "MenuAction", action: "StartIndefinite")
         sessionManager.start(mode: .indefinite)
     }
 
     @objc private func stopSession() {
+        AwakeLogger.shared.event(level: .trace, component: "MenuAction", action: "StopSession")
         sessionManager.stop()
     }
 
@@ -224,14 +243,17 @@ final class StatusBarController: NSObject, NSMenuDelegate {
     }
 
     @objc private func openAbout() {
+        AwakeLogger.shared.event(level: .trace, component: "MenuAction", action: "OpenAbout")
         onAboutRequested()
     }
 
     @objc private func quitApp() {
+        AwakeLogger.shared.event(level: .info, component: "MenuAction", action: "Quit")
         NSApp.terminate(nil)
     }
 
     func menuDidClose(_ menu: NSMenu) {
+        AwakeLogger.shared.event(level: .trace, component: "StatusBar", action: "MenuClosed")
         if statusItem.menu === menu {
             statusItem.menu = nil
         }
