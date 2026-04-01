@@ -1,0 +1,116 @@
+name: Release Build
+
+on:
+  release:
+    types:
+      - published
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: Release tag to build (for manual runs)
+        required: true
+        type: string
+
+permissions:
+  contents: write
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
+
+jobs:
+  build-and-attach:
+    name: Build and Attach macOS App
+    runs-on: macos-15
+    timeout-minutes: 30
+
+    steps:
+      - name: Resolve release tag
+        id: tag
+        run: |
+          if [ "${{ github.event_name }}" = "release" ]; then
+            TAG="${{ github.event.release.tag_name }}"
+          else
+            TAG="${{ inputs.tag }}"
+          fi
+
+          if [ -z "$TAG" ]; then
+            echo "Release tag is empty" >&2
+            exit 1
+          fi
+          echo "value=$TAG" >> "$GITHUB_OUTPUT"
+
+      - name: Checkout tag
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ steps.tag.outputs.value }}
+
+      - name: Resolve app version metadata
+        id: meta
+        run: |
+          SETTINGS="$(xcodebuild -project awake.xcodeproj -scheme awake -configuration Release -showBuildSettings)"
+          VERSION="$(echo "$SETTINGS" | awk -F' = ' '/MARKETING_VERSION/{print $2; exit}')"
+          BUILD="$(echo "$SETTINGS" | awk -F' = ' '/CURRENT_PROJECT_VERSION/{print $2; exit}')"
+
+          if [ -z "$VERSION" ] || [ -z "$BUILD" ]; then
+            echo "Unable to resolve MARKETING_VERSION/CURRENT_PROJECT_VERSION" >&2
+            exit 1
+          fi
+
+          ARCHIVE_NAME="awake-${VERSION}-${BUILD}-macos.zip"
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          echo "build=$BUILD" >> "$GITHUB_OUTPUT"
+          echo "archive_name=$ARCHIVE_NAME" >> "$GITHUB_OUTPUT"
+
+      - name: Build app target (Release)
+        run: |
+          DERIVED_DATA="$RUNNER_TEMP/DerivedDataRelease"
+          xcodebuild \
+            -project awake.xcodeproj \
+            -scheme awake \
+            -configuration Release \
+            -destination 'platform=macOS' \
+            -sdk macosx \
+            -derivedDataPath "$DERIVED_DATA" \
+            CODE_SIGNING_ALLOWED=NO \
+            CODE_SIGNING_REQUIRED=NO \
+            MACOSX_DEPLOYMENT_TARGET=13.0 \
+            build
+
+      - name: Package release app
+        id: package
+        run: |
+          DERIVED_DATA="$RUNNER_TEMP/DerivedDataRelease"
+          APP_PATH="$DERIVED_DATA/Build/Products/Release/awake.app"
+          ARTIFACT_DIR="$GITHUB_WORKSPACE/.ci-artifacts/release"
+          OUT_ZIP="$ARTIFACT_DIR/${{ steps.meta.outputs.archive_name }}"
+          OUT_SHA="$ARTIFACT_DIR/${{ steps.meta.outputs.archive_name }}.sha256"
+
+          if [ ! -d "$APP_PATH" ]; then
+            echo "Built app not found at $APP_PATH" >&2
+            exit 1
+          fi
+
+          mkdir -p "$ARTIFACT_DIR"
+          ditto -c -k --sequesterRsrc --keepParent "$APP_PATH" "$OUT_ZIP"
+          shasum -a 256 "$OUT_ZIP" > "$OUT_SHA"
+
+          echo "zip=$OUT_ZIP" >> "$GITHUB_OUTPUT"
+          echo "sha=$OUT_SHA" >> "$GITHUB_OUTPUT"
+
+      - name: Upload release package artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: awake-release-package
+          path: |
+            ${{ steps.package.outputs.zip }}
+            ${{ steps.package.outputs.sha }}
+          if-no-files-found: error
+
+      - name: Upload assets to GitHub Release
+        if: github.event_name == 'release'
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.tag.outputs.value }}
+          files: |
+            ${{ steps.package.outputs.zip }}
+            ${{ steps.package.outputs.sha }}
