@@ -11,6 +11,9 @@ concurrency:
   group: ci-${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
+
 jobs:
   core-tests-and-coverage:
     name: Core Tests + Coverage Gate
@@ -72,6 +75,8 @@ jobs:
     name: Xcode Build (macOS App)
     runs-on: macos-15
     timeout-minutes: 30
+    env:
+      DERIVED_DATA: ${{ runner.temp }}/DerivedData
 
     steps:
       - name: Checkout
@@ -85,7 +90,24 @@ jobs:
             -configuration Debug \
             -destination 'platform=macOS' \
             -sdk macosx \
+            -derivedDataPath "$DERIVED_DATA" \
             CODE_SIGNING_ALLOWED=NO \
             CODE_SIGNING_REQUIRED=NO \
             MACOSX_DEPLOYMENT_TARGET=13.0 \
             build
+
+      - name: Package built app
+        run: |
+          APP_PATH="$DERIVED_DATA/Build/Products/Debug/awake.app"
+          if [ ! -d "$APP_PATH" ]; then
+            echo "Built app not found at $APP_PATH" >&2
+            exit 1
+          fi
+          ditto -c -k --sequesterRsrc --keepParent "$APP_PATH" "$RUNNER_TEMP/awake.app.zip"
+
+      - name: Upload app artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: awake-macos-app
+          path: ${{ runner.temp }}/awake.app.zip
+          if-no-files-found: error
