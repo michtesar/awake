@@ -15,6 +15,9 @@ struct AwakeApp: App {
 
     init() {
         AwakeLogger.shared.log("App init started. PID=\(ProcessInfo.processInfo.processIdentifier)")
+        UserDefaults.standard.register(defaults: [
+            "showRemainingInMenuBar": false
+        ])
         let storedValue = UserDefaults.standard.object(forKey: "menuBarExtraInserted")
         AwakeLogger.shared.log("Stored menuBarExtraInserted before forcing value: \(String(describing: storedValue))")
         UserDefaults.standard.set(true, forKey: "menuBarExtraInserted")
