@@ -1,0 +1,36 @@
+"app.name" = "Awake";
+
+"menu.section.quick_start" = "빠른 시작";
+"menu.quick.30m" = "30분 동안 켜기";
+"menu.quick.1h" = "1시간 동안 켜기";
+"menu.quick.4h" = "4시간 동안 켜기";
+"menu.quick.indefinite" = "끌 때까지 켜기";
+
+"menu.section.current_session" = "현재 세션";
+"menu.session.remaining" = "남은 시간: %@";
+"menu.session.active" = "Awake가 활성화됨";
+"menu.action.stop" = "중지";
+
+"menu.section.preferences" = "환경설정";
+"menu.pref.launch_at_login" = "로그인 시 실행";
+"menu.pref.show_remaining_in_menubar" = "남은 시간을 메뉴 막대에 표시";
+
+"menu.action.about" = "Awake 정보";
+"menu.action.quit" = "종료";
+
+"status.tooltip.active" = "Awake가 활성화됨";
+"status.tooltip.inactive" = "Awake가 비활성화됨";
+
+"about.window.title" = "Awake 정보";
+"about.subtitle" = "필요할 때만 Mac을 깨어 있게 유지합니다.";
+"about.version" = "버전 %@ (%@)";
+"about.feature.menubar_only" = "메뉴 막대 전용";
+"about.feature.presets" = "원클릭 빠른 프리셋";
+"about.feature.launch_at_login" = "로그인 시 자동 시작";
+"about.feature.privacy" = "네트워크 없음, 추적 없음";
+"about.action.open_logs" = "로그 열기";
+"about.action.close" = "닫기";
+
+"error.session.unable_to_start" = "Awake를 시작할 수 없습니다.";
+"error.session.unexpected_stop" = "Awake 세션이 예기치 않게 종료되었습니다.";
+"error.login_item.unable_to_update" = "“로그인 시 실행”을 업데이트할 수 없습니다.";

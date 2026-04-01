@@ -1,0 +1,36 @@
+"app.name" = "Awake";
+
+"menu.section.quick_start" = "Szybki start";
+"menu.quick.30m" = "Włącz na 30 minut";
+"menu.quick.1h" = "Włącz na 1 godzinę";
+"menu.quick.4h" = "Włącz na 4 godziny";
+"menu.quick.indefinite" = "Włącz do ręcznego wyłączenia";
+
+"menu.section.current_session" = "Bieżąca sesja";
+"menu.session.remaining" = "Pozostało: %@";
+"menu.session.active" = "Awake jest aktywny";
+"menu.action.stop" = "Zatrzymaj";
+
+"menu.section.preferences" = "Preferencje";
+"menu.pref.launch_at_login" = "Uruchamiaj przy logowaniu";
+"menu.pref.show_remaining_in_menubar" = "Pokaż pozostały czas na pasku menu";
+
+"menu.action.about" = "O Awake";
+"menu.action.quit" = "Zakończ";
+
+"status.tooltip.active" = "Awake jest aktywny";
+"status.tooltip.inactive" = "Awake jest nieaktywny";
+
+"about.window.title" = "O Awake";
+"about.subtitle" = "Utrzymuje Maca aktywnego dokładnie wtedy, kiedy tego potrzebujesz.";
+"about.version" = "Wersja %@ (%@)";
+"about.feature.menubar_only" = "Tylko pasek menu";
+"about.feature.presets" = "Szybkie presety jednym kliknięciem";
+"about.feature.launch_at_login" = "Uruchamia się przy logowaniu";
+"about.feature.privacy" = "Bez sieci, bez śledzenia";
+"about.action.open_logs" = "Otwórz logi";
+"about.action.close" = "Zamknij";
+
+"error.session.unable_to_start" = "Nie udało się uruchomić Awake.";
+"error.session.unexpected_stop" = "Sesja Awake zakończyła się nieoczekiwanie.";
+"error.login_item.unable_to_update" = "Nie udało się zaktualizować opcji „Uruchamiaj przy logowaniu”.";

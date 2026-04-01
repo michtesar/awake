@@ -1,0 +1,36 @@
+"app.name" = "Awake";
+
+"menu.section.quick_start" = "クイックスタート";
+"menu.quick.30m" = "30分間オンにする";
+"menu.quick.1h" = "1時間オンにする";
+"menu.quick.4h" = "4時間オンにする";
+"menu.quick.indefinite" = "オフにするまでオンにする";
+
+"menu.section.current_session" = "現在のセッション";
+"menu.session.remaining" = "残り: %@";
+"menu.session.active" = "Awake は有効です";
+"menu.action.stop" = "停止";
+
+"menu.section.preferences" = "設定";
+"menu.pref.launch_at_login" = "ログイン時に起動";
+"menu.pref.show_remaining_in_menubar" = "残り時間をメニューバーに表示";
+
+"menu.action.about" = "Awake について";
+"menu.action.quit" = "終了";
+
+"status.tooltip.active" = "Awake は有効です";
+"status.tooltip.inactive" = "Awake は無効です";
+
+"about.window.title" = "Awake について";
+"about.subtitle" = "必要なときだけ Mac をスリープさせません。";
+"about.version" = "バージョン %@ (%@)";
+"about.feature.menubar_only" = "メニューバー専用";
+"about.feature.presets" = "ワンクリックのクイックプリセット";
+"about.feature.launch_at_login" = "ログイン時に起動";
+"about.feature.privacy" = "ネットワーク通信なし、トラッキングなし";
+"about.action.open_logs" = "ログを開く";
+"about.action.close" = "閉じる";
+
+"error.session.unable_to_start" = "Awake を開始できませんでした。";
+"error.session.unexpected_stop" = "Awake セッションが予期せず終了しました。";
+"error.login_item.unable_to_update" = "「ログイン時に起動」を更新できませんでした。";

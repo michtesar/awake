@@ -1,0 +1,36 @@
+"app.name" = "Awake";
+
+"menu.section.quick_start" = "Démarrage rapide";
+"menu.quick.30m" = "Activer pendant 30 minutes";
+"menu.quick.1h" = "Activer pendant 1 heure";
+"menu.quick.4h" = "Activer pendant 4 heures";
+"menu.quick.indefinite" = "Activer jusqu'à désactivation";
+
+"menu.section.current_session" = "Session en cours";
+"menu.session.remaining" = "Temps restant : %@";
+"menu.session.active" = "Awake est actif";
+"menu.action.stop" = "Arrêter";
+
+"menu.section.preferences" = "Préférences";
+"menu.pref.launch_at_login" = "Lancer à l'ouverture de session";
+"menu.pref.show_remaining_in_menubar" = "Afficher le temps restant dans la barre des menus";
+
+"menu.action.about" = "À propos d'Awake";
+"menu.action.quit" = "Quitter";
+
+"status.tooltip.active" = "Awake est actif";
+"status.tooltip.inactive" = "Awake est inactif";
+
+"about.window.title" = "À propos d'Awake";
+"about.subtitle" = "Garde votre Mac éveillé exactement quand vous en avez besoin.";
+"about.version" = "Version %@ (%@)";
+"about.feature.menubar_only" = "Uniquement dans la barre des menus";
+"about.feature.presets" = "Préréglages rapides en un clic";
+"about.feature.launch_at_login" = "Démarre à l'ouverture de session";
+"about.feature.privacy" = "Pas de réseau, pas de suivi";
+"about.action.open_logs" = "Ouvrir les logs";
+"about.action.close" = "Fermer";
+
+"error.session.unable_to_start" = "Impossible de démarrer Awake.";
+"error.session.unexpected_stop" = "La session Awake s'est arrêtée de façon inattendue.";
+"error.login_item.unable_to_update" = "Impossible de mettre à jour « Lancer à l'ouverture de session ».";

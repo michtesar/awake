@@ -1,0 +1,36 @@
+"app.name" = "Awake";
+
+"menu.section.quick_start" = "Início rápido";
+"menu.quick.30m" = "Ativar por 30 minutos";
+"menu.quick.1h" = "Ativar por 1 hora";
+"menu.quick.4h" = "Ativar por 4 horas";
+"menu.quick.indefinite" = "Ativar até desativar";
+
+"menu.section.current_session" = "Sessão atual";
+"menu.session.remaining" = "Restante: %@";
+"menu.session.active" = "Awake está ativo";
+"menu.action.stop" = "Parar";
+
+"menu.section.preferences" = "Preferências";
+"menu.pref.launch_at_login" = "Iniciar ao fazer login";
+"menu.pref.show_remaining_in_menubar" = "Mostrar tempo restante na barra de menu";
+
+"menu.action.about" = "Sobre o Awake";
+"menu.action.quit" = "Sair";
+
+"status.tooltip.active" = "Awake está ativo";
+"status.tooltip.inactive" = "Awake está inativo";
+
+"about.window.title" = "Sobre o Awake";
+"about.subtitle" = "Mantém seu Mac ativo exatamente quando você precisa.";
+"about.version" = "Versão %@ (%@)";
+"about.feature.menubar_only" = "Somente na barra de menu";
+"about.feature.presets" = "Presets rápidos com um clique";
+"about.feature.launch_at_login" = "Inicia ao fazer login";
+"about.feature.privacy" = "Sem rede, sem rastreamento";
+"about.action.open_logs" = "Abrir logs";
+"about.action.close" = "Fechar";
+
+"error.session.unable_to_start" = "Não foi possível iniciar o Awake.";
+"error.session.unexpected_stop" = "A sessão do Awake terminou inesperadamente.";
+"error.login_item.unable_to_update" = "Não foi possível atualizar “Iniciar ao fazer login”.";

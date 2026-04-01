@@ -94,6 +94,14 @@
 				nl,
 				de,
 				cs,
+				es,
+				ko,
+				fr,
+				it,
+				"zh-Hans",
+				pl,
+				ja,
+				"pt-BR",
 			);
 			mainGroup = 4C78483C2F7DC84000B8ECC0;
 			minimizedProjectReferenceProxies = 1;

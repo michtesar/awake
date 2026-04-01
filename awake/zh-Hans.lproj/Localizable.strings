@@ -1,0 +1,36 @@
+"app.name" = "Awake";
+
+"menu.section.quick_start" = "快速启动";
+"menu.quick.30m" = "开启 30 分钟";
+"menu.quick.1h" = "开启 1 小时";
+"menu.quick.4h" = "开启 4 小时";
+"menu.quick.indefinite" = "保持开启，直到手动关闭";
+
+"menu.section.current_session" = "当前会话";
+"menu.session.remaining" = "剩余：%@";
+"menu.session.active" = "Awake 已开启";
+"menu.action.stop" = "停止";
+
+"menu.section.preferences" = "偏好设置";
+"menu.pref.launch_at_login" = "登录时启动";
+"menu.pref.show_remaining_in_menubar" = "在菜单栏显示剩余时间";
+
+"menu.action.about" = "关于 Awake";
+"menu.action.quit" = "退出";
+
+"status.tooltip.active" = "Awake 已开启";
+"status.tooltip.inactive" = "Awake 已关闭";
+
+"about.window.title" = "关于 Awake";
+"about.subtitle" = "只在你需要时让 Mac 保持唤醒。";
+"about.version" = "版本 %@ (%@)";
+"about.feature.menubar_only" = "仅菜单栏";
+"about.feature.presets" = "一键快速预设";
+"about.feature.launch_at_login" = "登录时自动启动";
+"about.feature.privacy" = "无网络、无追踪";
+"about.action.open_logs" = "打开日志";
+"about.action.close" = "关闭";
+
+"error.session.unable_to_start" = "无法启动 Awake。";
+"error.session.unexpected_stop" = "Awake 会话意外结束。";
+"error.login_item.unable_to_update" = "无法更新“登录时启动”。";
