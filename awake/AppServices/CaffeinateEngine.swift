@@ -11,7 +11,7 @@ final class CaffeinateEngine: AwakeEngine {
     }
 
     private var process: Process?
-    private var onUnexpectedStop: (@Sendable () -> Void)?
+    private var suppressedTerminationPID: pid_t?
 
     func start(mode: AwakeMode, onUnexpectedStop: @escaping @Sendable () -> Void) throws {
         if isRunning {
@@ -27,36 +27,44 @@ final class CaffeinateEngine: AwakeEngine {
         }
         process.arguments = args
 
-        self.onUnexpectedStop = onUnexpectedStop
-
         process.terminationHandler = { [weak self] task in
             guard let self else { return }
 
-            let shouldNotify = task.terminationReason != .exit || task.terminationStatus != 0
+            guard self.process === task else {
+                return
+            }
             self.process = nil
 
+            if self.suppressedTerminationPID == task.processIdentifier {
+                self.suppressedTerminationPID = nil
+                return
+            }
+
+            let shouldNotify = task.terminationReason != .exit || task.terminationStatus != 0
+
             if shouldNotify {
-                self.onUnexpectedStop?()
+                onUnexpectedStop()
             }
         }
 
         do {
             try process.run()
             self.process = process
+            suppressedTerminationPID = nil
         } catch {
             self.process = nil
-            self.onUnexpectedStop = nil
             throw CaffeinateError.failedToLaunch
         }
     }
 
     func stop() {
-        onUnexpectedStop = nil
         guard let process else { return }
 
+        suppressedTerminationPID = process.processIdentifier
         if process.isRunning {
             process.terminate()
+        } else {
+            self.process = nil
         }
-        self.process = nil
     }
 }

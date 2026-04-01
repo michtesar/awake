@@ -9,10 +9,18 @@ struct MenuBarLabelView: View {
     private let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
 
     var body: some View {
-        Text(compactLabel)
-            .font(.system(size: 13, weight: .semibold, design: .rounded))
-            .monospacedDigit()
-            .lineLimit(1)
+        Group {
+            if let remaining = visibleRemainingTime {
+                HStack(spacing: 4) {
+                    statusIcon
+                    Text(TimeFormatting.menuBarRemaining(remaining))
+                        .font(.system(size: 12, weight: .semibold, design: .rounded))
+                        .monospacedDigit()
+                }
+            } else {
+                statusIcon
+            }
+        }
         .fixedSize(horizontal: true, vertical: false)
         .animation(.easeInOut(duration: 0.16), value: sessionManager.state.isActive)
         .onReceive(timer) { now = $0 }
@@ -24,6 +32,12 @@ struct MenuBarLabelView: View {
         }
     }
 
+    private var statusIcon: some View {
+        Image(systemName: sessionManager.state.isActive ? "cup.and.saucer.fill" : "cup.and.saucer")
+            .symbolRenderingMode(.hierarchical)
+            .imageScale(.medium)
+    }
+
     private var visibleRemainingTime: TimeInterval? {
         guard showRemainingInMenuBar,
               let remaining = sessionManager.remainingTime(at: now),
@@ -31,13 +45,6 @@ struct MenuBarLabelView: View {
             return nil
         }
         return remaining
-    }
-
-    private var compactLabel: String {
-        if let remaining = visibleRemainingTime {
-            return "⚡\(TimeFormatting.menuBarRemaining(remaining))"
-        }
-        return "⚡"
     }
 }
 
