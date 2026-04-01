@@ -1,10 +1,10 @@
 "app.name" = "Awake";
 
 "menu.section.quick_start" = "Snel starten";
-"menu.quick.30m" = "Awake 30 minuten inschakelen";
-"menu.quick.1h" = "Awake 1 uur inschakelen";
-"menu.quick.4h" = "Awake 4 uur inschakelen";
-"menu.quick.indefinite" = "Awake inschakelen tot je het uitzet";
+"menu.quick.30m" = "30 minuten inschakelen";
+"menu.quick.1h" = "1 uur inschakelen";
+"menu.quick.4h" = "4 uur inschakelen";
+"menu.quick.indefinite" = "Inschakelen tot je het uitzet";
 
 "menu.section.current_session" = "Huidige sessie";
 "menu.session.remaining" = "Resterend: %@";
@@ -22,11 +22,11 @@
 "status.tooltip.inactive" = "Awake is inactief";
 
 "about.window.title" = "Over Awake";
-"about.subtitle" = "Houd je Mac wakker zonder gedoe.";
+"about.subtitle" = "Houdt je Mac wakker precies wanneer jij dat wilt.";
 "about.version" = "Versie %@ (%@)";
 "about.feature.menubar_only" = "Alleen menubalk";
-"about.feature.presets" = "Voorinstellingen met één klik";
-"about.feature.launch_at_login" = "Ondersteunt starten bij inloggen";
+"about.feature.presets" = "Snelle presets met één klik";
+"about.feature.launch_at_login" = "Start bij inloggen";
 "about.feature.privacy" = "Geen netwerk, geen tracking";
 "about.action.open_logs" = "Logboeken openen";
 "about.action.close" = "Sluiten";

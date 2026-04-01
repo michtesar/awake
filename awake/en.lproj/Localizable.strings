@@ -1,10 +1,10 @@
 "app.name" = "Awake";
 
 "menu.section.quick_start" = "Quick Start";
-"menu.quick.30m" = "Keep Awake for 30 minutes";
-"menu.quick.1h" = "Keep Awake for 1 hour";
-"menu.quick.4h" = "Keep Awake for 4 hours";
-"menu.quick.indefinite" = "Keep Awake until turned off";
+"menu.quick.30m" = "Turn on for 30 minutes";
+"menu.quick.1h" = "Turn on for 1 hour";
+"menu.quick.4h" = "Turn on for 4 hours";
+"menu.quick.indefinite" = "Turn on until turned off";
 
 "menu.section.current_session" = "Current Session";
 "menu.session.remaining" = "Remaining: %@";
@@ -22,11 +22,11 @@
 "status.tooltip.inactive" = "Awake is inactive";
 
 "about.window.title" = "About Awake";
-"about.subtitle" = "Keep your Mac awake with zero friction.";
+"about.subtitle" = "Keeps your Mac awake exactly when you need it.";
 "about.version" = "Version %@ (%@)";
 "about.feature.menubar_only" = "Menu bar only";
-"about.feature.presets" = "One-click presets";
-"about.feature.launch_at_login" = "Launch at login support";
+"about.feature.presets" = "One-click quick presets";
+"about.feature.launch_at_login" = "Starts at login";
 "about.feature.privacy" = "No network, no tracking";
 "about.action.open_logs" = "Open Logs";
 "about.action.close" = "Close";

@@ -1,10 +1,10 @@
 "app.name" = "Awake";
 
 "menu.section.quick_start" = "Rychlé spuštění";
-"menu.quick.30m" = "Zapnout Awake na 30 minut";
-"menu.quick.1h" = "Zapnout Awake na 1 hodinu";
-"menu.quick.4h" = "Zapnout Awake na 4 hodiny";
-"menu.quick.indefinite" = "Zapnout Awake, dokud ho nevypneš";
+"menu.quick.30m" = "Zapnout na 30 minut";
+"menu.quick.1h" = "Zapnout na 1 hodinu";
+"menu.quick.4h" = "Zapnout na 4 hodiny";
+"menu.quick.indefinite" = "Zapnout, dokud nevypneš";
 
 "menu.section.current_session" = "Aktuální relace";
 "menu.session.remaining" = "Zbývá: %@";
@@ -22,12 +22,12 @@
 "status.tooltip.inactive" = "Awake je neaktivní";
 
 "about.window.title" = "O aplikaci Awake";
-"about.subtitle" = "Udrží tvůj Mac vzhůru bez zbytečností.";
+"about.subtitle" = "Udrží Mac vzhůru přesně tehdy, kdy potřebuješ.";
 "about.version" = "Verze %@ (%@)";
-"about.feature.menubar_only" = "Pouze menu bar";
-"about.feature.presets" = "Přednastavení na jedno kliknutí";
-"about.feature.launch_at_login" = "Podpora spuštění po přihlášení";
-"about.feature.privacy" = "Bez sítě, bez trackingu";
+"about.feature.menubar_only" = "Jen v řádku nabídek";
+"about.feature.presets" = "Rychlé volby na jedno kliknutí";
+"about.feature.launch_at_login" = "Automatické spuštění po přihlášení";
+"about.feature.privacy" = "Bez sítě a bez sledování";
 "about.action.open_logs" = "Otevřít logy";
 "about.action.close" = "Zavřít";
 
