@@ -78,8 +78,6 @@ jobs:
     name: Xcode Build (macOS App)
     runs-on: macos-15
     timeout-minutes: 30
-    env:
-      DERIVED_DATA: ${{ runner.temp }}/DerivedData
 
     steps:
       - name: Checkout
@@ -87,6 +85,7 @@ jobs:
 
       - name: Build app target
         run: |
+          DERIVED_DATA="$RUNNER_TEMP/DerivedData"
           xcodebuild \
             -project awake.xcodeproj \
             -scheme awake \
@@ -101,18 +100,23 @@ jobs:
 
       - name: Package built app
         run: |
+          DERIVED_DATA="$RUNNER_TEMP/DerivedData"
           APP_PATH="$DERIVED_DATA/Build/Products/Debug/awake.app"
+          ARTIFACT_DIR="$GITHUB_WORKSPACE/.ci-artifacts"
+          OUT_ZIP="$ARTIFACT_DIR/awake.app.zip"
+
           if [ ! -d "$APP_PATH" ]; then
             echo "Built app not found at $APP_PATH" >&2
             exit 1
           fi
-          ditto -c -k --sequesterRsrc --keepParent "$APP_PATH" "$RUNNER_TEMP/awake.app.zip"
+          mkdir -p "$ARTIFACT_DIR"
+          ditto -c -k --sequesterRsrc --keepParent "$APP_PATH" "$OUT_ZIP"
 
       - name: Upload app artifact
         uses: actions/upload-artifact@v4
         with:
           name: awake-macos-app
-          path: ${{ runner.temp }}/awake.app.zip
+          path: .ci-artifacts/awake.app.zip
           if-no-files-found: error
 
   release:
@@ -123,8 +127,6 @@ jobs:
       - xcode-build
     runs-on: macos-15
     timeout-minutes: 30
-    env:
-      DERIVED_DATA: ${{ runner.temp }}/DerivedDataRelease
 
     steps:
       - name: Checkout
@@ -152,6 +154,7 @@ jobs:
 
       - name: Build app target (Release)
         run: |
+          DERIVED_DATA="$RUNNER_TEMP/DerivedDataRelease"
           xcodebuild \
             -project awake.xcodeproj \
             -scheme awake \
@@ -167,15 +170,18 @@ jobs:
       - name: Package release app
         id: package
         run: |
+          DERIVED_DATA="$RUNNER_TEMP/DerivedDataRelease"
           APP_PATH="$DERIVED_DATA/Build/Products/Release/awake.app"
-          OUT_ZIP="$RUNNER_TEMP/${{ steps.meta.outputs.archive_name }}"
-          OUT_SHA="$RUNNER_TEMP/${{ steps.meta.outputs.archive_name }}.sha256"
+          ARTIFACT_DIR="$GITHUB_WORKSPACE/.ci-artifacts/release"
+          OUT_ZIP="$ARTIFACT_DIR/${{ steps.meta.outputs.archive_name }}"
+          OUT_SHA="$ARTIFACT_DIR/${{ steps.meta.outputs.archive_name }}.sha256"
 
           if [ ! -d "$APP_PATH" ]; then
             echo "Built app not found at $APP_PATH" >&2
             exit 1
           fi
 
+          mkdir -p "$ARTIFACT_DIR"
           ditto -c -k --sequesterRsrc --keepParent "$APP_PATH" "$OUT_ZIP"
           shasum -a 256 "$OUT_ZIP" > "$OUT_SHA"
 
