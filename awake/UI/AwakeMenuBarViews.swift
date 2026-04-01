@@ -49,6 +49,7 @@ struct MenuBarLabelView: View {
 }
 
 struct AwakeMenuContentView: View {
+    @Environment(\.openWindow) private var openWindow
     @ObservedObject var sessionManager: AwakeSessionManager
     @ObservedObject var loginItemManager: LoginItemManager
 
@@ -148,10 +149,7 @@ struct AwakeMenuContentView: View {
             }
 
             Button("About Awake") {
-                NSApp.orderFrontStandardAboutPanel(options: [
-                    NSApplication.AboutPanelOptionKey.applicationName: "Awake"
-                ])
-                NSApp.activate(ignoringOtherApps: true)
+                openWindow(id: "about")
             }
 
             Button("Quit") {

@@ -38,5 +38,11 @@ struct AwakeApp: App {
         .onChange(of: scenePhase) { phase in
             AwakeLogger.shared.log("Scene phase changed: \(String(describing: phase))")
         }
+
+        Window("About Awake", id: "about") {
+            AboutAwakeView()
+        }
+        .defaultSize(width: 420, height: 430)
+        .windowResizability(.contentSize)
     }
 }
