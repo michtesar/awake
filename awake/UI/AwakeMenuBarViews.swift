@@ -86,33 +86,33 @@ struct AwakeMenuContentView: View {
     }
 
     private var quickStartSection: some View {
-        Section("Quick Start") {
-            Button("Keep Awake for 30 minutes") {
+        Section(L10n.string("menu.section.quick_start")) {
+            Button(L10n.string("menu.quick.30m")) {
                 sessionManager.start(mode: .timed(duration: 30 * 60))
             }
 
-            Button("Keep Awake for 1 hour") {
+            Button(L10n.string("menu.quick.1h")) {
                 sessionManager.start(mode: .timed(duration: 60 * 60))
             }
 
-            Button("Keep Awake for 4 hours") {
+            Button(L10n.string("menu.quick.4h")) {
                 sessionManager.start(mode: .timed(duration: 4 * 60 * 60))
             }
 
-            Button("Keep Awake until turned off") {
+            Button(L10n.string("menu.quick.indefinite")) {
                 sessionManager.start(mode: .indefinite)
             }
         }
     }
 
     private var activeSessionSection: some View {
-        Section("Current Session") {
+        Section(L10n.string("menu.section.current_session")) {
             if let remaining = sessionManager.remainingTime(at: sessionManager.clockNow) {
-                Text("Remaining: \(TimeFormatting.shortRemaining(remaining))")
+                Text(L10n.format("menu.session.remaining", TimeFormatting.shortRemaining(remaining)))
                     .font(.callout)
                     .foregroundStyle(.secondary)
             } else {
-                Text("Awake is active")
+                Text(L10n.string("menu.session.active"))
                     .font(.callout)
                     .foregroundStyle(.secondary)
             }
@@ -120,29 +120,29 @@ struct AwakeMenuContentView: View {
             Button(role: .destructive) {
                 sessionManager.stop()
             } label: {
-                Text("Stop")
+                Text(L10n.string("menu.action.stop"))
             }
         }
     }
 
     private var preferencesSection: some View {
-        Section("Preferences") {
-            Toggle("Launch at Login", isOn: Binding(
+        Section(L10n.string("menu.section.preferences")) {
+            Toggle(L10n.string("menu.pref.launch_at_login"), isOn: Binding(
                 get: { loginItemManager.isEnabled },
                 set: { loginItemManager.setEnabled($0) }
             ))
 
-            Toggle("Show Remaining Time in Menu Bar", isOn: $showRemainingInMenuBar)
+            Toggle(L10n.string("menu.pref.show_remaining_in_menubar"), isOn: $showRemainingInMenuBar)
         }
     }
 
     private var appSection: some View {
         Section {
-            Button("About Awake") {
+            Button(L10n.string("menu.action.about")) {
                 openWindow(id: "about")
             }
 
-            Button("Quit") {
+            Button(L10n.string("menu.action.quit")) {
                 NSApp.terminate(nil)
             }
             .keyboardShortcut("q")

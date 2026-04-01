@@ -35,7 +35,7 @@ final class LoginItemManager: ObservableObject {
             AwakeLogger.shared.event(level: .info, component: "LoginItem", action: "SetSucceeded", details: "enabled=\(enabled)")
         } catch {
             isEnabled = SMAppService.mainApp.status == .enabled
-            lastError = "Unable to update Launch at Login."
+            lastError = L10n.string("error.login_item.unable_to_update")
             AwakeLogger.shared.event(
                 level: .error,
                 component: "LoginItem",

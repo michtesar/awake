@@ -1,0 +1,36 @@
+"app.name" = "Awake";
+
+"menu.section.quick_start" = "Quick Start";
+"menu.quick.30m" = "Keep Awake for 30 minutes";
+"menu.quick.1h" = "Keep Awake for 1 hour";
+"menu.quick.4h" = "Keep Awake for 4 hours";
+"menu.quick.indefinite" = "Keep Awake until turned off";
+
+"menu.section.current_session" = "Current Session";
+"menu.session.remaining" = "Remaining: %@";
+"menu.session.active" = "Awake is active";
+"menu.action.stop" = "Stop";
+
+"menu.section.preferences" = "Preferences";
+"menu.pref.launch_at_login" = "Launch at Login";
+"menu.pref.show_remaining_in_menubar" = "Show Remaining Time in Menu Bar";
+
+"menu.action.about" = "About Awake";
+"menu.action.quit" = "Quit";
+
+"status.tooltip.active" = "Awake is active";
+"status.tooltip.inactive" = "Awake is inactive";
+
+"about.window.title" = "About Awake";
+"about.subtitle" = "Keep your Mac awake with zero friction.";
+"about.version" = "Version %@ (%@)";
+"about.feature.menubar_only" = "Menu bar only";
+"about.feature.presets" = "One-click presets";
+"about.feature.launch_at_login" = "Launch at login support";
+"about.feature.privacy" = "No network, no tracking";
+"about.action.open_logs" = "Open Logs";
+"about.action.close" = "Close";
+
+"error.session.unable_to_start" = "Unable to start Awake.";
+"error.session.unexpected_stop" = "Awake session ended unexpectedly.";
+"error.login_item.unable_to_update" = "Unable to update Launch at Login.";

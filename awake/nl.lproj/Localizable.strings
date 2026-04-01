@@ -1,0 +1,36 @@
+"app.name" = "Awake";
+
+"menu.section.quick_start" = "Snel starten";
+"menu.quick.30m" = "Awake 30 minuten inschakelen";
+"menu.quick.1h" = "Awake 1 uur inschakelen";
+"menu.quick.4h" = "Awake 4 uur inschakelen";
+"menu.quick.indefinite" = "Awake inschakelen tot je het uitzet";
+
+"menu.section.current_session" = "Huidige sessie";
+"menu.session.remaining" = "Resterend: %@";
+"menu.session.active" = "Awake is actief";
+"menu.action.stop" = "Stop";
+
+"menu.section.preferences" = "Voorkeuren";
+"menu.pref.launch_at_login" = "Start bij inloggen";
+"menu.pref.show_remaining_in_menubar" = "Resterende tijd in menubalk tonen";
+
+"menu.action.about" = "Over Awake";
+"menu.action.quit" = "Stop";
+
+"status.tooltip.active" = "Awake is actief";
+"status.tooltip.inactive" = "Awake is inactief";
+
+"about.window.title" = "Over Awake";
+"about.subtitle" = "Houd je Mac wakker zonder gedoe.";
+"about.version" = "Versie %@ (%@)";
+"about.feature.menubar_only" = "Alleen menubalk";
+"about.feature.presets" = "Voorinstellingen met één klik";
+"about.feature.launch_at_login" = "Ondersteunt starten bij inloggen";
+"about.feature.privacy" = "Geen netwerk, geen tracking";
+"about.action.open_logs" = "Logboeken openen";
+"about.action.close" = "Sluiten";
+
+"error.session.unable_to_start" = "Awake kan niet worden gestart.";
+"error.session.unexpected_stop" = "De Awake-sessie is onverwacht beëindigd.";
+"error.login_item.unable_to_update" = "‘Start bij inloggen’ kon niet worden bijgewerkt.";

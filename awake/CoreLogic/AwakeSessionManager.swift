@@ -31,12 +31,6 @@ public final class AwakeSessionManager: ObservableObject {
     }
 
     public func start(mode: AwakeMode) {
-        AwakeLogger.shared.event(
-            level: .info,
-            component: "Session",
-            action: "StartRequested",
-            details: "mode=\(mode)"
-        )
         clockNow = dateProvider.now
         let now = dateProvider.now
 
@@ -61,32 +55,14 @@ public final class AwakeSessionManager: ObservableObject {
             state = .active(mode: mode, startedAt: now, endsAt: endsAt)
             persistSnapshotIfNeeded()
             lastError = nil
-            AwakeLogger.shared.event(
-                level: .info,
-                component: "Session",
-                action: "Started",
-                details: "endsAt=\(String(describing: endsAt))"
-            )
         } catch {
             state = .inactive
             snapshotStore.clear()
             lastError = "Unable to start Awake."
-            AwakeLogger.shared.event(
-                level: .error,
-                component: "Session",
-                action: "StartFailed",
-                details: "error=\(error.localizedDescription)"
-            )
         }
     }
 
     public func stop(clearError: Bool = true) {
-        AwakeLogger.shared.event(
-            level: .info,
-            component: "Session",
-            action: "StopRequested",
-            details: "clearError=\(clearError)"
-        )
         engine.stop()
         state = .inactive
         snapshotStore.clear()
@@ -103,7 +79,6 @@ public final class AwakeSessionManager: ObservableObject {
         }
 
         if case .timed = mode, let endsAt, clockNow >= endsAt {
-            AwakeLogger.shared.event(level: .debug, component: "Session", action: "AutoStopTimedSession")
             stop(clearError: true)
         }
     }
@@ -123,30 +98,20 @@ public final class AwakeSessionManager: ObservableObject {
 
     private func restoreFromSnapshotIfNeeded() {
         guard let snapshot = snapshotStore.load() else {
-            AwakeLogger.shared.event(level: .trace, component: "SessionRestore", action: "NoSnapshot")
             return
         }
-
-        AwakeLogger.shared.event(
-            level: .debug,
-            component: "SessionRestore",
-            action: "SnapshotFound",
-            details: "mode=\(snapshot.mode.rawValue) endsAt=\(String(describing: snapshot.endsAt))"
-        )
 
         switch snapshot.mode {
         case .indefinite:
             start(mode: .indefinite)
         case .timed:
             guard let endsAt = snapshot.endsAt else {
-                AwakeLogger.shared.event(level: .warning, component: "SessionRestore", action: "InvalidTimedSnapshotMissingEnd")
                 snapshotStore.clear()
                 return
             }
 
             let remaining = endsAt.timeIntervalSince(dateProvider.now)
             guard remaining > 0 else {
-                AwakeLogger.shared.event(level: .info, component: "SessionRestore", action: "ExpiredTimedSnapshotDiscarded")
                 snapshotStore.clear()
                 return
             }
@@ -167,7 +132,6 @@ public final class AwakeSessionManager: ObservableObject {
         state = .inactive
         snapshotStore.clear()
         lastError = "Awake session ended unexpectedly."
-        AwakeLogger.shared.event(level: .error, component: "Session", action: "UnexpectedStop")
     }
 
     private func startTicker() {

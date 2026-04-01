@@ -13,6 +13,11 @@ Awake is a native, menu bar-only macOS app that keeps your Mac awake with a clea
 - Launch at login toggle via `SMAppService.mainApp`.
 - Session restore after app relaunch.
 - Lightweight architecture with testable core domain logic.
+- Localized UI:
+  - English (`en`, default)
+  - German (`de`)
+  - Dutch (`nl`)
+  - Czech (`cs`)
 
 ## Product Doc
 - PRD: [docs/PRD.md](/Users/michael/Developer/awake/docs/PRD.md)

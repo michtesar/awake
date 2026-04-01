@@ -37,7 +37,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
                 backing: .buffered,
                 defer: false
             )
-            window.title = "About Awake"
+            window.title = L10n.string("about.window.title")
             window.isReleasedWhenClosed = false
             window.center()
             window.contentViewController = host

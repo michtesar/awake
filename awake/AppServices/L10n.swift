@@ -1,0 +1,12 @@
+import Foundation
+
+enum L10n {
+    static func string(_ key: String) -> String {
+        NSLocalizedString(key, tableName: nil, bundle: .main, value: key, comment: "")
+    }
+
+    static func format(_ key: String, _ arguments: CVarArg...) -> String {
+        let pattern = string(key)
+        return String(format: pattern, locale: Locale.current, arguments: arguments)
+    }
+}

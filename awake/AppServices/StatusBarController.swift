@@ -109,55 +109,55 @@ final class StatusBarController: NSObject, NSMenuDelegate {
     private func buildMenu() -> NSMenu {
         let menu = NSMenu()
 
-        addSectionHeader("Quick Start", to: menu)
-        menu.addItem(makeActionItem("Keep Awake for 30 minutes", action: #selector(start30Minutes)))
-        menu.addItem(makeActionItem("Keep Awake for 1 hour", action: #selector(start1Hour)))
-        menu.addItem(makeActionItem("Keep Awake for 4 hours", action: #selector(start4Hours)))
-        menu.addItem(makeActionItem("Keep Awake until turned off", action: #selector(startIndefinite)))
+        addSectionHeader(L10n.string("menu.section.quick_start"), to: menu)
+        menu.addItem(makeActionItem(L10n.string("menu.quick.30m"), action: #selector(start30Minutes)))
+        menu.addItem(makeActionItem(L10n.string("menu.quick.1h"), action: #selector(start1Hour)))
+        menu.addItem(makeActionItem(L10n.string("menu.quick.4h"), action: #selector(start4Hours)))
+        menu.addItem(makeActionItem(L10n.string("menu.quick.indefinite"), action: #selector(startIndefinite)))
 
         if sessionManager.state.isActive {
             menu.addItem(.separator())
-            addSectionHeader("Current Session", to: menu)
+            addSectionHeader(L10n.string("menu.section.current_session"), to: menu)
 
             let remainingText: String
             if let remaining = sessionManager.remainingTime(at: sessionManager.clockNow) {
-                remainingText = "Remaining: \(TimeFormatting.shortRemaining(remaining))"
+                remainingText = L10n.format("menu.session.remaining", TimeFormatting.shortRemaining(remaining))
             } else {
-                remainingText = "Awake is active"
+                remainingText = L10n.string("menu.session.active")
             }
 
             let statusItem = NSMenuItem(title: remainingText, action: nil, keyEquivalent: "")
             statusItem.isEnabled = false
             menu.addItem(statusItem)
-            menu.addItem(makeActionItem("Stop", action: #selector(stopSession)))
+            menu.addItem(makeActionItem(L10n.string("menu.action.stop"), action: #selector(stopSession)))
         }
 
         menu.addItem(.separator())
-        addSectionHeader("Preferences", to: menu)
+        addSectionHeader(L10n.string("menu.section.preferences"), to: menu)
 
-        let launchItem = makeActionItem("Launch at Login", action: #selector(toggleLaunchAtLogin))
+        let launchItem = makeActionItem(L10n.string("menu.pref.launch_at_login"), action: #selector(toggleLaunchAtLogin))
         launchItem.state = loginItemManager.isEnabled ? .on : .off
         menu.addItem(launchItem)
 
-        let showRemainingItem = makeActionItem("Show Remaining Time in Menu Bar", action: #selector(toggleShowRemainingInMenuBar))
+        let showRemainingItem = makeActionItem(L10n.string("menu.pref.show_remaining_in_menubar"), action: #selector(toggleShowRemainingInMenuBar))
         showRemainingItem.state = isShowingRemainingInMenuBar ? .on : .off
         menu.addItem(showRemainingItem)
 
         if let sessionError = sessionManager.lastError {
-            let errorItem = NSMenuItem(title: sessionError, action: nil, keyEquivalent: "")
+            let errorItem = NSMenuItem(title: localizedErrorMessage(sessionError), action: nil, keyEquivalent: "")
             errorItem.isEnabled = false
             menu.addItem(errorItem)
         }
 
         if let loginError = loginItemManager.lastError {
-            let errorItem = NSMenuItem(title: loginError, action: nil, keyEquivalent: "")
+            let errorItem = NSMenuItem(title: localizedErrorMessage(loginError), action: nil, keyEquivalent: "")
             errorItem.isEnabled = false
             menu.addItem(errorItem)
         }
 
         menu.addItem(.separator())
-        menu.addItem(makeActionItem("About Awake", action: #selector(openAbout)))
-        menu.addItem(makeActionItem("Quit", action: #selector(quitApp), keyEquivalent: "q"))
+        menu.addItem(makeActionItem(L10n.string("menu.action.about"), action: #selector(openAbout)))
+        menu.addItem(makeActionItem(L10n.string("menu.action.quit"), action: #selector(quitApp), keyEquivalent: "q"))
 
         return menu
     }
@@ -195,7 +195,7 @@ final class StatusBarController: NSObject, NSMenuDelegate {
         let isActive = sessionManager.state.isActive
         let symbolName = isActive ? "cup.and.saucer.fill" : "cup.and.saucer"
 
-        button.image = NSImage(systemSymbolName: symbolName, accessibilityDescription: "Awake")
+        button.image = NSImage(systemSymbolName: symbolName, accessibilityDescription: L10n.string("app.name"))
         button.image?.isTemplate = true
 
         if isShowingRemainingInMenuBar,
@@ -206,7 +206,20 @@ final class StatusBarController: NSObject, NSMenuDelegate {
             button.title = ""
         }
 
-        button.toolTip = isActive ? "Awake is active" : "Awake is inactive"
+        button.toolTip = isActive ? L10n.string("status.tooltip.active") : L10n.string("status.tooltip.inactive")
+    }
+
+    private func localizedErrorMessage(_ message: String) -> String {
+        switch message {
+        case "Unable to start Awake.":
+            return L10n.string("error.session.unable_to_start")
+        case "Awake session ended unexpectedly.":
+            return L10n.string("error.session.unexpected_stop")
+        case "Unable to update Launch at Login.":
+            return L10n.string("error.login_item.unable_to_update")
+        default:
+            return message
+        }
     }
 
     @objc private func start30Minutes() {

@@ -14,14 +14,14 @@ struct AboutAwakeView: View {
                 .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
 
             VStack(spacing: 6) {
-                Text("Awake")
+                Text(L10n.string("app.name"))
                     .font(.system(size: 28, weight: .semibold, design: .rounded))
 
-                Text("Keep your Mac awake with zero friction.")
+                Text(L10n.string("about.subtitle"))
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
 
-                Text("Version \(version) (\(build))")
+                Text(L10n.format("about.version", version, build))
                     .font(.footnote)
                     .foregroundStyle(.secondary)
                     .monospacedDigit()
@@ -30,10 +30,10 @@ struct AboutAwakeView: View {
             Divider()
 
             VStack(alignment: .leading, spacing: 10) {
-                Label("Menu bar only", systemImage: "menubar.rectangle")
-                Label("One-click presets", systemImage: "bolt")
-                Label("Launch at login support", systemImage: "person.crop.circle.badge.checkmark")
-                Label("No network, no tracking", systemImage: "lock.shield")
+                Label(L10n.string("about.feature.menubar_only"), systemImage: "menubar.rectangle")
+                Label(L10n.string("about.feature.presets"), systemImage: "bolt")
+                Label(L10n.string("about.feature.launch_at_login"), systemImage: "person.crop.circle.badge.checkmark")
+                Label(L10n.string("about.feature.privacy"), systemImage: "lock.shield")
             }
             .font(.callout)
             .frame(maxWidth: .infinity, alignment: .leading)
@@ -41,13 +41,13 @@ struct AboutAwakeView: View {
             Divider()
 
             HStack {
-                Button("Open Logs") {
+                Button(L10n.string("about.action.open_logs")) {
                     NSWorkspace.shared.open(AwakeLogger.shared.fileURL)
                 }
 
                 Spacer()
 
-                Button("Close") {
+                Button(L10n.string("about.action.close")) {
                     NSApp.keyWindow?.close()
                 }
                 .keyboardShortcut(.defaultAction)
