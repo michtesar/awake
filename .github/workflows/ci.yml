@@ -77,17 +77,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Detect latest macOS SDK on runner
-        id: sdk
-        run: |
-          SDK=$(xcodebuild -showsdks | awk '/-sdk macosx/{print $2}' | tail -1)
-          if [ -z "$SDK" ]; then
-            echo "Failed to detect macOS SDK" >&2
-            exit 1
-          fi
-          echo "sdk=$SDK" >> "$GITHUB_OUTPUT"
-          echo "Detected SDK: $SDK"
-
       - name: Build app target
         run: |
           xcodebuild \
@@ -95,7 +84,7 @@ jobs:
             -scheme awake \
             -configuration Debug \
             -destination 'platform=macOS' \
-            -sdk '${{ steps.sdk.outputs.sdk }}' \
+            -sdk macosx \
             CODE_SIGNING_ALLOWED=NO \
             CODE_SIGNING_REQUIRED=NO \
             MACOSX_DEPLOYMENT_TARGET=13.0 \
