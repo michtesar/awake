@@ -29,6 +29,7 @@ public final class AwakeSessionManager: ObservableObject {
     }
 
     public func start(mode: AwakeMode) {
+        AwakeLogger.shared.log("Session start requested. Mode=\(String(describing: mode))")
         let now = dateProvider.now
 
         stop(clearError: false)
@@ -52,14 +53,17 @@ public final class AwakeSessionManager: ObservableObject {
             state = .active(mode: mode, startedAt: now, endsAt: endsAt)
             persistSnapshotIfNeeded()
             lastError = nil
+            AwakeLogger.shared.log("Session started successfully. EndsAt=\(String(describing: endsAt))")
         } catch {
             state = .inactive
             snapshotStore.clear()
             lastError = "Unable to start Awake."
+            AwakeLogger.shared.error("Session start failed with error: \(error.localizedDescription)")
         }
     }
 
     public func stop(clearError: Bool = true) {
+        AwakeLogger.shared.log("Session stop requested")
         engine.stop()
         state = .inactive
         snapshotStore.clear()
@@ -127,6 +131,7 @@ public final class AwakeSessionManager: ObservableObject {
         state = .inactive
         snapshotStore.clear()
         lastError = "Awake session ended unexpectedly."
+        AwakeLogger.shared.error("Session ended unexpectedly")
     }
 
     private func startTicker() {

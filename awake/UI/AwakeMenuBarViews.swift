@@ -1,25 +1,32 @@
 import AppKit
+import Combine
 import SwiftUI
 
 struct MenuBarLabelView: View {
     @ObservedObject var sessionManager: AwakeSessionManager
     @AppStorage("showRemainingInMenuBar") private var showRemainingInMenuBar = true
+    @State private var now = Date()
+    private let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
 
     var body: some View {
-        TimelineView(.periodic(from: .now, by: 1)) { context in
-            HStack(spacing: 4) {
-                Image(systemName: sessionManager.state.isActive ? "cup.and.saucer.fill" : "cup.and.saucer")
-                    .symbolRenderingMode(.hierarchical)
+        HStack(spacing: 4) {
+            Image(systemName: sessionManager.state.isActive ? "bolt.circle.fill" : "bolt.circle")
 
-                if showRemainingInMenuBar,
-                   let remaining = sessionManager.remainingTime(at: context.date),
-                   remaining > 0 {
-                    Text(TimeFormatting.menuBarRemaining(remaining))
-                        .font(.system(size: 12, weight: .semibold, design: .rounded))
-                        .monospacedDigit()
-                }
+            if showRemainingInMenuBar,
+               let remaining = sessionManager.remainingTime(at: now),
+               remaining > 0 {
+                Text(TimeFormatting.menuBarRemaining(remaining))
+                    .font(.system(size: 12, weight: .semibold, design: .rounded))
+                    .monospacedDigit()
             }
-            .animation(.easeInOut(duration: 0.16), value: sessionManager.state.isActive)
+        }
+        .animation(.easeInOut(duration: 0.16), value: sessionManager.state.isActive)
+        .onReceive(timer) { now = $0 }
+        .onAppear {
+            AwakeLogger.shared.log("MenuBar label appeared")
+        }
+        .onDisappear {
+            AwakeLogger.shared.log("MenuBar label disappeared")
         }
     }
 }
@@ -119,6 +126,10 @@ struct AwakeMenuContentView: View {
 
     private var appSection: some View {
         Section {
+            Button("Open Debug Log") {
+                NSWorkspace.shared.open(AwakeLogger.shared.fileURL)
+            }
+
             Button("About Awake") {
                 NSApp.orderFrontStandardAboutPanel(options: [
                     NSApplication.AboutPanelOptionKey.applicationName: "Awake"
