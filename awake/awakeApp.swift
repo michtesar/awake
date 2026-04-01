@@ -2,47 +2,35 @@ import SwiftUI
 
 @main
 struct AwakeApp: App {
-    @Environment(\.scenePhase) private var scenePhase
-    @AppStorage("menuBarExtraInserted") private var menuBarExtraInserted = true
-
-    @StateObject private var sessionManager = AwakeSessionManager(
-        engine: CaffeinateEngine(),
-        snapshotStore: UserDefaultsSnapshotStore(),
-        dateProvider: SystemDateProvider()
-    )
-
-    @StateObject private var loginItemManager = LoginItemManager()
+    @NSApplicationDelegateAdaptor(AppDelegate.self) private var appDelegate
 
     init() {
-        AwakeLogger.shared.log("App init started. PID=\(ProcessInfo.processInfo.processIdentifier)")
+        AwakeLogger.shared.event(
+            level: .info,
+            component: "App",
+            action: "Init",
+            details: "PID=\(ProcessInfo.processInfo.processIdentifier)"
+        )
         UserDefaults.standard.register(defaults: [
             "showRemainingInMenuBar": false
         ])
-        let storedValue = UserDefaults.standard.object(forKey: "menuBarExtraInserted")
-        AwakeLogger.shared.log("Stored menuBarExtraInserted before forcing value: \(String(describing: storedValue))")
-        UserDefaults.standard.set(true, forKey: "menuBarExtraInserted")
-        AwakeLogger.shared.log("menuBarExtraInserted forced to true in UserDefaults")
-        AwakeLogger.shared.log("Debug log file path: \(AwakeLogger.shared.fileURL.path)")
+        AwakeLogger.shared.event(
+            level: .debug,
+            component: "App",
+            action: "DefaultsRegistered",
+            details: "showRemainingInMenuBar=false"
+        )
+        AwakeLogger.shared.event(
+            level: .info,
+            component: "Logger",
+            action: "FilePath",
+            details: AwakeLogger.shared.fileURL.path
+        )
     }
 
     var body: some Scene {
-        MenuBarExtra(isInserted: $menuBarExtraInserted) {
-            AwakeMenuContentView(sessionManager: sessionManager, loginItemManager: loginItemManager)
-        } label: {
-            MenuBarLabelView(sessionManager: sessionManager)
+        Settings {
+            EmptyView()
         }
-        .menuBarExtraStyle(.menu)
-        .onChange(of: menuBarExtraInserted) { inserted in
-            AwakeLogger.shared.log("MenuBarExtra insertion state changed: \(inserted)")
-        }
-        .onChange(of: scenePhase) { phase in
-            AwakeLogger.shared.log("Scene phase changed: \(String(describing: phase))")
-        }
-
-        Window("About Awake", id: "about") {
-            AboutAwakeView()
-        }
-        .defaultSize(width: 420, height: 430)
-        .windowResizability(.contentSize)
     }
 }

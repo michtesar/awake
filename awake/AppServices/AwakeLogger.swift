@@ -2,6 +2,14 @@ import Foundation
 import OSLog
 
 final class AwakeLogger {
+    enum Level: String {
+        case trace = "TRACE"
+        case debug = "DEBUG"
+        case info = "INFO"
+        case warning = "WARNING"
+        case error = "ERROR"
+    }
+
     static let shared = AwakeLogger()
 
     private let logger = Logger(subsystem: "com.michaeltesar.awake", category: "app")
@@ -14,14 +22,32 @@ final class AwakeLogger {
         ensureLogFileExists()
     }
 
-    func log(_ message: String) {
-        logger.notice("\(message, privacy: .public)")
-        appendToFile("NOTICE", message)
+    func trace(_ message: String) {
+        write(level: .trace, message: message)
+    }
+
+    func debug(_ message: String) {
+        write(level: .debug, message: message)
+    }
+
+    func info(_ message: String) {
+        write(level: .info, message: message)
+    }
+
+    func warning(_ message: String) {
+        write(level: .warning, message: message)
     }
 
     func error(_ message: String) {
-        logger.error("\(message, privacy: .public)")
-        appendToFile("ERROR", message)
+        write(level: .error, message: message)
+    }
+
+    func event(level: Level = .trace, component: String, action: String, details: String? = nil) {
+        if let details, !details.isEmpty {
+            write(level: level, message: "[\(component)] \(action) | \(details)")
+        } else {
+            write(level: level, message: "[\(component)] \(action)")
+        }
     }
 
     private func ensureLogFileExists() {
@@ -30,9 +56,23 @@ final class AwakeLogger {
         }
     }
 
-    private func appendToFile(_ level: String, _ message: String) {
+    private func write(level: Level, message: String) {
+        switch level {
+        case .trace, .debug:
+            logger.debug("\(message, privacy: .public)")
+        case .info:
+            logger.info("\(message, privacy: .public)")
+        case .warning:
+            logger.warning("\(message, privacy: .public)")
+        case .error:
+            logger.error("\(message, privacy: .public)")
+        }
+        appendToFile(level, message)
+    }
+
+    private func appendToFile(_ level: Level, _ message: String) {
         let timestamp = ISO8601DateFormatter().string(from: Date())
-        let line = "[\(timestamp)] [\(level)] \(message)\n"
+        let line = "[\(timestamp)] [\(level.rawValue)] \(message)\n"
         guard let data = line.data(using: .utf8) else { return }
 
         queue.async { [fileURL] in

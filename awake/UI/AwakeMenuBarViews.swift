@@ -21,10 +21,10 @@ struct MenuBarLabelView: View {
         .fixedSize(horizontal: true, vertical: false)
         .animation(.easeInOut(duration: 0.16), value: sessionManager.state.isActive)
         .onAppear {
-            AwakeLogger.shared.log("MenuBar label appeared")
+            AwakeLogger.shared.event(level: .trace, component: "MenuBarLabel", action: "Appear")
         }
         .onDisappear {
-            AwakeLogger.shared.log("MenuBar label disappeared")
+            AwakeLogger.shared.event(level: .trace, component: "MenuBarLabel", action: "Disappear")
         }
     }
 
