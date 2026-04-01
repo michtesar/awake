@@ -1,0 +1,102 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  core-tests-and-coverage:
+    name: Core Tests + Coverage Gate
+    runs-on: macos-15
+    timeout-minutes: 20
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Run SwiftPM tests with coverage
+        run: swift test --enable-code-coverage
+
+      - name: Resolve coverage file path
+        id: coverage-path
+        run: |
+          echo "path=$(swift test --show-codecov-path)" >> "$GITHUB_OUTPUT"
+
+      - name: Enforce coverage >= 90%
+        env:
+          COVERAGE_PATH: ${{ steps.coverage-path.outputs.path }}
+          COVERAGE_THRESHOLD: "90.0"
+        run: |
+          python3 - <<'PY'
+          import json
+          import os
+          import sys
+
+          path = os.environ["COVERAGE_PATH"]
+          threshold = float(os.environ["COVERAGE_THRESHOLD"])
+
+          with open(path) as f:
+            payload = json.load(f)
+
+          covered = 0
+          total = 0
+          for export in payload.get("data", []):
+            for file_item in export.get("files", []):
+              line_summary = file_item.get("summary", {}).get("lines", {})
+              covered += line_summary.get("covered", 0)
+              total += line_summary.get("count", 0)
+
+          pct = (covered / total * 100.0) if total else 0.0
+          print(f"Coverage: {covered}/{total} = {pct:.2f}%")
+
+          if pct < threshold:
+            print(f"Coverage check failed: {pct:.2f}% < {threshold:.2f}%", file=sys.stderr)
+            sys.exit(1)
+          PY
+
+      - name: Upload coverage artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: awake-core-coverage-json
+          path: ${{ steps.coverage-path.outputs.path }}
+          if-no-files-found: error
+
+  xcode-build:
+    name: Xcode Build (macOS App)
+    runs-on: macos-15
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Detect latest macOS SDK on runner
+        id: sdk
+        run: |
+          SDK=$(xcodebuild -showsdks | awk '/-sdk macosx/{print $2}' | tail -1)
+          if [ -z "$SDK" ]; then
+            echo "Failed to detect macOS SDK" >&2
+            exit 1
+          fi
+          echo "sdk=$SDK" >> "$GITHUB_OUTPUT"
+          echo "Detected SDK: $SDK"
+
+      - name: Build app target
+        run: |
+          xcodebuild \
+            -project awake.xcodeproj \
+            -scheme awake \
+            -configuration Debug \
+            -destination 'platform=macOS' \
+            -sdk '${{ steps.sdk.outputs.sdk }}' \
+            CODE_SIGNING_ALLOWED=NO \
+            CODE_SIGNING_REQUIRED=NO \
+            MACOSX_DEPLOYMENT_TARGET=13.0 \
+            build

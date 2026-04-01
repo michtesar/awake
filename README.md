@@ -40,6 +40,13 @@ swift test --show-codecov-path
 Current core coverage:
 - `482/515 = 93.59%`
 
+## CI (GitHub Actions)
+- `CI` workflow:
+  - SwiftPM tests with code coverage
+  - coverage gate: minimum `90%`
+  - Xcode app build on macOS runner
+- `Dependency Review` workflow on pull requests
+
 ## Repository Layout
 - `awake/`:
   - `awakeApp.swift`: app entry point and menu bar scene.
