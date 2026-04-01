@@ -1,17 +1,20 @@
-//
-//  awakeApp.swift
-//  awake
-//
-//  Created by Michael Tesař on 01.04.2026.
-//
-
 import SwiftUI
 
 @main
-struct awakeApp: App {
+struct AwakeApp: App {
+    @StateObject private var sessionManager = AwakeSessionManager(
+        engine: CaffeinateEngine(),
+        snapshotStore: UserDefaultsSnapshotStore()
+    )
+
+    @StateObject private var loginItemManager = LoginItemManager()
+
     var body: some Scene {
-        WindowGroup {
-            ContentView()
+        MenuBarExtra {
+            AwakeMenuContentView(sessionManager: sessionManager, loginItemManager: loginItemManager)
+        } label: {
+            MenuBarLabelView(sessionManager: sessionManager)
         }
+        .menuBarExtraStyle(.menu)
     }
 }
