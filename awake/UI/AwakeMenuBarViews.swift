@@ -1,12 +1,9 @@
 import AppKit
-import Combine
 import SwiftUI
 
 struct MenuBarLabelView: View {
     @ObservedObject var sessionManager: AwakeSessionManager
     @AppStorage("showRemainingInMenuBar") private var showRemainingInMenuBar = false
-    @State private var now = Date()
-    private let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
 
     var body: some View {
         Group {
@@ -23,7 +20,6 @@ struct MenuBarLabelView: View {
         }
         .fixedSize(horizontal: true, vertical: false)
         .animation(.easeInOut(duration: 0.16), value: sessionManager.state.isActive)
-        .onReceive(timer) { now = $0 }
         .onAppear {
             AwakeLogger.shared.log("MenuBar label appeared")
         }
@@ -40,7 +36,7 @@ struct MenuBarLabelView: View {
 
     private var visibleRemainingTime: TimeInterval? {
         guard showRemainingInMenuBar,
-              let remaining = sessionManager.remainingTime(at: now),
+              let remaining = sessionManager.remainingTime(at: sessionManager.clockNow),
               remaining > 0 else {
             return nil
         }
@@ -111,16 +107,14 @@ struct AwakeMenuContentView: View {
 
     private var activeSessionSection: some View {
         Section("Current Session") {
-            TimelineView(.periodic(from: .now, by: 1)) { context in
-                if let remaining = sessionManager.remainingTime(at: context.date) {
-                    Text("Remaining: \(TimeFormatting.shortRemaining(remaining))")
-                        .font(.callout)
-                        .foregroundStyle(.secondary)
-                } else {
-                    Text("Awake is active")
-                        .font(.callout)
-                        .foregroundStyle(.secondary)
-                }
+            if let remaining = sessionManager.remainingTime(at: sessionManager.clockNow) {
+                Text("Remaining: \(TimeFormatting.shortRemaining(remaining))")
+                    .font(.callout)
+                    .foregroundStyle(.secondary)
+            } else {
+                Text("Awake is active")
+                    .font(.callout)
+                    .foregroundStyle(.secondary)
             }
 
             Button(role: .destructive) {
@@ -144,10 +138,6 @@ struct AwakeMenuContentView: View {
 
     private var appSection: some View {
         Section {
-            Button("Open Debug Log") {
-                NSWorkspace.shared.open(AwakeLogger.shared.fileURL)
-            }
-
             Button("About Awake") {
                 openWindow(id: "about")
             }

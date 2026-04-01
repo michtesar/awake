@@ -5,6 +5,7 @@ import Foundation
 public final class AwakeSessionManager: ObservableObject {
     @Published public private(set) var state: AwakeState = .inactive
     @Published public private(set) var lastError: String?
+    @Published public private(set) var clockNow: Date
 
     private let engine: AwakeEngine
     private let snapshotStore: SessionSnapshotStore
@@ -20,6 +21,7 @@ public final class AwakeSessionManager: ObservableObject {
         self.engine = engine
         self.snapshotStore = snapshotStore
         self.dateProvider = dateProvider
+        self.clockNow = dateProvider.now
 
         restoreFromSnapshotIfNeeded()
 
@@ -30,6 +32,7 @@ public final class AwakeSessionManager: ObservableObject {
 
     public func start(mode: AwakeMode) {
         AwakeLogger.shared.log("Session start requested. Mode=\(String(describing: mode))")
+        clockNow = dateProvider.now
         let now = dateProvider.now
 
         stop(clearError: false)
@@ -73,11 +76,13 @@ public final class AwakeSessionManager: ObservableObject {
     }
 
     public func refresh() {
+        clockNow = dateProvider.now
+
         guard case let .active(mode, _, endsAt) = state else {
             return
         }
 
-        if case .timed = mode, let endsAt, dateProvider.now >= endsAt {
+        if case .timed = mode, let endsAt, clockNow >= endsAt {
             stop(clearError: true)
         }
     }
