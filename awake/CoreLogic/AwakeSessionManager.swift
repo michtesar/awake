@@ -14,7 +14,7 @@ public final class AwakeSessionManager: ObservableObject {
     public init(
         engine: AwakeEngine,
         snapshotStore: SessionSnapshotStore,
-        dateProvider: DateProvider = SystemDateProvider(),
+        dateProvider: DateProvider,
         enableTicker: Bool = true
     ) {
         self.engine = engine
@@ -35,8 +35,9 @@ public final class AwakeSessionManager: ObservableObject {
 
         do {
             try engine.start(mode: mode, onUnexpectedStop: { [weak self] in
+                guard let self else { return }
                 Task { @MainActor in
-                    self?.handleUnexpectedStop()
+                    self.handleUnexpectedStop()
                 }
             })
 
@@ -130,8 +131,9 @@ public final class AwakeSessionManager: ObservableObject {
 
     private func startTicker() {
         ticker = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { [weak self] _ in
+            guard let self else { return }
             Task { @MainActor in
-                self?.refresh()
+                self.refresh()
             }
         }
     }
